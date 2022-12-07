@@ -46,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.physicsBody?.allowsRotation = false
         character.physicsBody?.affectedByGravity = true
         character.physicsBody?.friction = 1
+        character.physicsBody?.restitution = 0
         character.physicsBody?.mass = 0.1
         character.physicsBody?.categoryBitMask = PhysicsCategory.Santa
         addChild(character)
@@ -92,15 +93,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         // print(character.physicsBody?.velocity) // USE FOR DEBUG
-        // Max speed regulator
-        if ((character.physicsBody?.velocity.dx)! > 400.00) {
-            character.physicsBody?.velocity = CGVectorMake(400, 0);
-         }
-        
-        if ((character.physicsBody?.velocity.dx)! < -400.00) {
-            character.physicsBody?.velocity = CGVectorMake(-400, 0);
-         }
-
         switch (touchLocation) {
         case .Left:
             character.physicsBody?.applyImpulse(CGVector(dx: -movespeed, dy: 0))
@@ -139,7 +131,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             jumpState = .Jump
                 }
             }
-    
+    // Max speed regulator
+    override func didSimulatePhysics() {
+        var yVelocity : CGFloat? = character.physicsBody?.velocity.dy
+        if ((character.physicsBody?.velocity.dx)! > 500.00) {
+            character.physicsBody?.velocity = CGVectorMake(500, yVelocity!);
+         }
+        
+        if ((character.physicsBody?.velocity.dx)! < -500.00) {
+            character.physicsBody?.velocity = CGVectorMake(-500, yVelocity!);
+         }
+    }
 }
 
 
