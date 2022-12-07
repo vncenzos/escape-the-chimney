@@ -14,15 +14,30 @@ enum TouchState {
     case None
 }
 
+enum JumpState {
+    case Jump
+    case Landing
+    case None
+}
+
+struct PhysicsCategory {
+    static let None: UInt32 = 0
+    static let Wall: UInt32 = 0b1 // 1
+    static let Santa: UInt32 = 0b10 // 2
+    static let Fire: UInt32 = 0b11 // 3
+    static let Cookie: UInt32 = 0b100 // 4
+    static let Milk: UInt32 = 0b101 // 5
+    static let Spring: UInt32 = 0b110 // 6
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var character = SKSpriteNode(imageNamed: "santa")
     var movespeed: Int = 5
     var touchLocation: TouchState = .None
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
-    
+    var jumpState: JumpState = .None
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
         //SantaCharacter
         character.setScale(1)
         character.position = CGPoint(x:0, y:0)
@@ -32,6 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.physicsBody?.affectedByGravity = true
         character.physicsBody?.friction = 1
         character.physicsBody?.mass = 0.1
+        character.physicsBody?.categoryBitMask = PhysicsCategory.Santa
         addChild(character)
     }
     
@@ -74,7 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        
+        // Called before each frame is rendered
         // print(character.physicsBody?.velocity) // USE FOR DEBUG
         // Max speed regulator
         if ((character.physicsBody?.velocity.dx)! > 400.00) {
@@ -84,8 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((character.physicsBody?.velocity.dx)! < -400.00) {
             character.physicsBody?.velocity = CGVectorMake(-400, 0);
          }
-        
-        // Called before each frame is rendered
+
         switch (touchLocation) {
         case .Left:
             character.physicsBody?.applyImpulse(CGVector(dx: -movespeed, dy: 0))
@@ -95,7 +110,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             break
         }
         
+        switch (jumpState) {
+        case .Jump:
+            character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
+            jumpState = .None
+        case .Landing:
+            break
+        case .None:
+            break
+        }
     }
+    
+    func santaDeath() {
+        character.removeFromParent()
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+            let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+                if collision == PhysicsCategory.Santa | PhysicsCategory.Cookie {
+                  //  cookieGet()
+                }
+        if collision == PhysicsCategory.Santa | PhysicsCategory.Fire {
+            print("Contact between santa and fire")
+                    santaDeath()
+                }
+        if collision == PhysicsCategory.Santa | PhysicsCategory.Spring {
+            print("Contact between santa and spring")
+            jumpState = .Jump
+                }
+            }
     
 }
 
