@@ -37,9 +37,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Dichiarare sprite qui
     
+    var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
-    var santa = SKSpriteNode(imageNamed: "santa")
+    var backgroundGroup = [SKNode]()
+    var backgroundNames = ["backgroundWall"]
     
     //Distribuzione randomica asse x
     var randomPos = GKRandomDistribution(lowestValue: -320, highestValue: 320)
@@ -52,6 +54,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
         
+        //Distribuzione gaussiana background
+        var random = GKRandomSource()
+        var randomBackground = GKGaussianDistribution(randomSource: random, lowestValue: 0, highestValue: 8)
+        
         camera = cam //Assegnazione telecamera
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
         
@@ -61,6 +67,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         makePlatform()
         makePlatform()
         makePlatform()
+        makeBackground()
+        makeBackground()
+        makeBackground()
     }
     //Chiamata quando tocchi lo schermo
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -116,13 +125,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case .Right:
             santa.physicsBody?.applyImpulse(CGVector(dx: movespeed, dy: 0))
         case .None:
-            break
+            let yVelocity : CGFloat? = santa.physicsBody?.velocity.dy
+            santa.physicsBody?.velocity = CGVectorMake(0, yVelocity!)
         }
         
         //Switch per direzione asse Y (salto)
         switch (jumpState) {
         case .Jump:
-            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
+            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 80))
             jumpState = .None
             makePlatform()
         case .Landing:
@@ -171,6 +181,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         santa.position = CGPoint(x:0, y:-600)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
+        santa.zPosition = 100
         santa.physicsBody?.isDynamic = true
         santa.physicsBody?.allowsRotation = false
         santa.physicsBody?.affectedByGravity = true
@@ -178,7 +189,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         santa.physicsBody?.restitution = 0
         santa.physicsBody?.mass = 0.1
         santa.physicsBody?.categoryBitMask = PhysicsCategory.Santa
-        santa.zPosition = 100
         addChild(santa)
         
     }
@@ -186,6 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Proprietà delle piattaforme
     func makePlatform() -> (){
         let platform = SKSpriteNode(imageNamed: platformNames.randomElement()!)
+        platform.zPosition = 2
         platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.allowsRotation = false
@@ -210,6 +221,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func makeSpring(position: CGPoint) -> SKNode{
         
         let spring = SKSpriteNode(imageNamed: "SpringPH")
+        spring.zPosition = 3
         spring.physicsBody = SKPhysicsBody(rectangleOf: spring.size)
         spring.position = CGPoint(x: position.x, y: position.y+20)
         spring.physicsBody?.isDynamic = false
@@ -221,5 +233,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(spring)
         return spring
         
+    }
+    
+    func makeBackground(){
+        let background = SKSpriteNode(imageNamed: backgroundNames.randomElement()!)
+        background.zPosition = -10
+        if backgroundGroup.isEmpty{
+            background.position = CGPoint(x: 0, y:-768)
+        }
+        else{
+            var lastpos = backgroundGroup.last?.position.y
+            background.position = CGPoint(x: 0, y: lastpos!+768)
+        }
+        print("Backgrund generated at \(background.position)") //Test per posizione di background
+        backgroundGroup.append(background)
+        addChild(background)
     }
 }
