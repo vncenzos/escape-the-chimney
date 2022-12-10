@@ -51,7 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var randomPos = GKRandomDistribution(lowestValue: -320, highestValue: 320)
     
     //Distribuzione gaussiana per background
-    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 5)
+    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 4)
     
     //Dichiarare variabili gameplay qui
     var movespeed: Int = 5
@@ -78,7 +78,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         //Creazione highscoreLabe
         highscoreCreation()
+        
     }
+    
     //Chiamata quando tocchi lo schermo
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch:AnyObject in touches {
@@ -218,7 +220,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platform.physicsBody?.affectedByGravity = false
         platform.physicsBody?.categoryBitMask = PhysicsCategory.Wall
         platform.physicsBody?.collisionBitMask = 0
-        var randomX = randomPos.nextInt()
+        let randomX = randomPos.nextInt()
         if platformGroup.isEmpty{
             platform.position = CGPoint(x: randomX , y: Int(santa.position.y+250))
         }
@@ -226,7 +228,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         {
             platform.position = CGPoint(x: randomX , y: Int(platformGroup.last!.position.y+250))
         }
-        print("Platform generated at \(platform.position)") //Test per posizione di generazione piattaforme
+        //print("Platform generated at \(platform.position)") //Test per posizione di generazione piattaforme
         addChild(platform)
         makeSpring(position: platform.position)
         platformGroup.append(platform)
@@ -245,14 +247,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spring.physicsBody?.affectedByGravity = false
         spring.physicsBody?.categoryBitMask = PhysicsCategory.Spring
         spring.physicsBody?.contactTestBitMask = PhysicsCategory.Spring
-        print("Spring generated at \(spring.position)") //Test per posizione di generazione molle
+        //print("Spring generated at \(spring.position)") //Test per posizione di generazione molle
         addChild(spring)
         return spring
         
     }
     
     func makeBackground(){
-        var randomElement = randomBackground.nextInt()
+        let randomElement = randomBackground.nextInt()
         let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
         background.zPosition = -10
         background.setScale(6)
@@ -260,10 +262,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.position = CGPoint(x: 0, y:-768)
         }
         else{
-            var lastpos = backgroundGroup.last?.position.y
+            let lastpos = backgroundGroup.last?.position.y
             background.position = CGPoint(x: 0, y: lastpos!+192)
         }
-        print("Background generated at \(background.position)") //Test per posizione di background
+        //print("Background generated at \(background.position)") //Test per posizione di background
         backgroundGroup.append(background)
         addChild(background)
         
@@ -281,13 +283,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func highscoreUpdate(){
         
-        var height = Int(santa.position.y)+625
+        let height = Int(santa.position.y)+625
         if(height > highest){
             highest = height
         }
-        var labelHeight = santa.position.y + 1240
+        let labelHeight = santa.position.y + 1240
         highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
-        highscoreLabel.text = String(highest)
+        highscoreLabel.text = "Score: "  + String(highest)
         
     }
 }
