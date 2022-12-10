@@ -29,47 +29,55 @@ struct PhysicsCategory {
     static let Cookie: UInt32 = 0b100 // 4
     static let Milk: UInt32 = 0b101 // 5
     static let Spring: UInt32 = 0b110 // 6
+    static let Background: UInt32 = 0b111 // 7
+    static let DeleteBox: UInt32 = 0b1000 // 8
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
     //Dichiarazione telecamera
     let cam = SKCameraNode()
-    
+
     //Dichiarare sprite qui
     
+    var highscoreLabel = SKLabelNode()
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
     var backgroundGroup = [SKNode]()
-    var backgroundNames = ["backgroundWall"]
+    var backgroundNames = ["wall2", "wall3", "wall4", "wall5", "wall6"]
     
     //Distribuzione randomica asse x
     var randomPos = GKRandomDistribution(lowestValue: -320, highestValue: 320)
+    
+    //Distribuzione gaussiana per background
+    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 5)
     
     //Dichiarare variabili gameplay qui
     var movespeed: Int = 5
     var touchLocation: TouchState = .None
     var jumpState: JumpState = .None
+    var highest = 0 //Funzione highscore
     
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
         
-        //Distribuzione gaussiana background
-        var random = GKRandomSource()
-        var randomBackground = GKGaussianDistribution(randomSource: random, lowestValue: 0, highestValue: 8)
-        
         camera = cam //Assegnazione telecamera
+        
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
         
         //Creazione di Nabbo Batale
         makeSanta()
         //Creazione di piattaforme iniziali
-        makePlatform()
-        makePlatform()
-        makePlatform()
-        makeBackground()
-        makeBackground()
-        makeBackground()
+        for _ in 1...5 {
+            makePlatform()
+        }
+        //Creazione background iniziale
+        for _ in 1...5 {
+            makeBackground()
+        }
+        //Creazione highscoreLabe
+        highscoreCreation()
     }
     //Chiamata quando tocchi lo schermo
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -103,6 +111,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
+        
+        //Aggiornamento highscore
+        highscoreUpdate()
+        
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
         cam.position.y = santa.position.y + 550
@@ -135,6 +147,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 80))
             jumpState = .None
             makePlatform()
+            makeBackground()
+            makeBackground()
         case .Landing:
             break
         case .None:
@@ -179,7 +193,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Propietà di Babbo Natale
     func makeSanta(){
         
-        santa.position = CGPoint(x:0, y:-600)
+        santa.position = CGPoint(x:0, y:-625)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
         santa.zPosition = 100
         santa.physicsBody?.isDynamic = true
@@ -195,6 +209,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Proprietà delle piattaforme
     func makePlatform() -> (){
+        
         let platform = SKSpriteNode(imageNamed: platformNames.randomElement()!)
         platform.zPosition = 2
         platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
@@ -215,7 +230,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(platform)
         makeSpring(position: platform.position)
         platformGroup.append(platform)
-        print(platformGroup.last)
+        //print(platformGroup.last) //Test per ultimo elemento di piattaforme
+        
     }
     
     func makeSpring(position: CGPoint) -> SKNode{
@@ -236,17 +252,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func makeBackground(){
-        let background = SKSpriteNode(imageNamed: backgroundNames.randomElement()!)
+        var randomElement = randomBackground.nextInt()
+        let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
         background.zPosition = -10
+        background.setScale(6)
         if backgroundGroup.isEmpty{
             background.position = CGPoint(x: 0, y:-768)
         }
         else{
             var lastpos = backgroundGroup.last?.position.y
-            background.position = CGPoint(x: 0, y: lastpos!+768)
+            background.position = CGPoint(x: 0, y: lastpos!+192)
         }
-        print("Backgrund generated at \(background.position)") //Test per posizione di background
+        print("Background generated at \(background.position)") //Test per posizione di background
         backgroundGroup.append(background)
         addChild(background)
+        
+    }
+    
+    func highscoreCreation(){
+        
+        highscoreLabel.zPosition = 10
+        highscoreLabel.verticalAlignmentMode = .center
+        highscoreLabel.fontName = "Minecraft"
+        highscoreLabel.setScale(2)
+        addChild(highscoreLabel)
+        
+    }
+    
+    func highscoreUpdate(){
+        
+        var height = Int(santa.position.y)+625
+        if(height > highest){
+            highest = height
+        }
+        var labelHeight = santa.position.y + 1240
+        highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
+        highscoreLabel.text = String(highest)
+        
     }
 }
