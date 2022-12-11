@@ -124,10 +124,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
         cam.position.y = CGFloat(highest) - 200
-        cam.position.x = 0
+        cam.position.x = 5
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
-        if((santa.physicsBody?.velocity.dy)!>10){
+        if((santa.physicsBody?.velocity.dy)!>1){
             santa.physicsBody?.collisionBitMask = 0
             santa.physicsBody?.categoryBitMask = 0
         }
@@ -210,7 +210,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         santa.position = CGPoint(x:0, y:-625)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
-        santa.zPosition = 100
+        santa.zPosition = 20
         santa.physicsBody?.isDynamic = true
         santa.physicsBody?.allowsRotation = false
         santa.physicsBody?.affectedByGravity = true
@@ -255,8 +255,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let spring = SKSpriteNode(imageNamed: "SpringPH")
         spring.zPosition = 3
+        spring.alpha = 0
+        spring.xScale = 6
         spring.physicsBody = SKPhysicsBody(rectangleOf: spring.size)
-        spring.position = CGPoint(x: position.x, y: position.y+20)
+        spring.position = CGPoint(x: position.x, y: position.y+5)
         spring.physicsBody?.isDynamic = false
         spring.physicsBody?.allowsRotation = false
         spring.physicsBody?.affectedByGravity = false
@@ -273,7 +275,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
         background.zPosition = -10
         if backgroundGroup.isEmpty{
-            background.position = CGPoint(x: 0, y:-768)
+            background.position = CGPoint(x: 0, y:-900)
         }
         else{
             let lastpos = backgroundGroup.last?.position.y
@@ -310,6 +312,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(killzone)
         addChild(fire)
         fire.setScale(6)
+        fire.zPosition = 30
         killzone.xScale = 100
         killzone.physicsBody = SKPhysicsBody(rectangleOf: killzone.size)
         killzone.alpha = 0
