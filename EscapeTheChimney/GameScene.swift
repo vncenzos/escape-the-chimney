@@ -40,24 +40,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     //Dichiarare sprite qui
     
+    var killzone = SKSpriteNode(imageNamed: "SpringPH")
+    var fire = SKSpriteNode(imageNamed: "fuoco1")
     var highscoreLabel = SKLabelNode()
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
     var backgroundGroup = [SKNode]()
-    var backgroundNames = ["wall2", "wall3", "wall4", "wall5", "wall6"]
+    var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
     
     //Distribuzione randomica asse x
     var randomPos = GKRandomDistribution(lowestValue: -320, highestValue: 320)
     
     //Distribuzione gaussiana per background
-    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 4)
+    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 26)
     
     //Dichiarare variabili gameplay qui
     var movespeed: Int = 5
     var touchLocation: TouchState = .None
     var jumpState: JumpState = .None
     var highest = 0 //Funzione highscore
+    var killzoneHeight = -1000 //Altezza killzone
     
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
@@ -69,16 +72,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Creazione di Nabbo Batale
         makeSanta()
         //Creazione di piattaforme iniziali
-        for _ in 1...5 {
+        for _ in 1...10 {
             makePlatform()
         }
         //Creazione background iniziale
-        for _ in 1...5 {
+        for _ in 1...10 {
             makeBackground()
         }
-        //Creazione highscoreLabe
+        //Creazione highscoreLabel
         highscoreCreation()
-        
+        //Creazione killzone
+        killzoneCreation()
     }
     
     //Chiamata quando tocchi lo schermo
@@ -113,22 +117,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
-        
         //Aggiornamento highscore
         highscoreUpdate()
-        
+        //Aggiornamento killzone
+        killzoneUpdate()
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
-        cam.position.y = santa.position.y + 550
+        cam.position.y = CGFloat(highest) - 200
         cam.position.x = 0
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
-        if((santa.physicsBody?.velocity.dy)!>100){
+        if((santa.physicsBody?.velocity.dy)!>10){
             santa.physicsBody?.collisionBitMask = 0
+            santa.physicsBody?.categoryBitMask = 0
         }
         else
         {
             santa.physicsBody?.collisionBitMask = PhysicsCategory.Santa
+            santa.physicsBody?.categoryBitMask = PhysicsCategory.Santa
         }
         
         //Switch per direzione asse X
@@ -146,7 +152,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Switch per direzione asse Y (salto)
         switch (jumpState) {
         case .Jump:
-            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 80))
+            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
             jumpState = .None
             makePlatform()
             makeBackground()
@@ -188,6 +194,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((santa.physicsBody?.velocity.dx)! < -500.00) {
             santa.physicsBody?.velocity = CGVectorMake(-500, yVelocity!);
         }
+        let xVelocity : CGFloat? = santa.physicsBody?.velocity.dx
+        if ((santa.physicsBody?.velocity.dy)! > 1000.00) {
+            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, 1000);
+         }
+        if ((santa.physicsBody?.velocity.dy)! < -1000.00) {
+            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, -1000);
+        }
     }
     
     //ENTITY LIST
@@ -213,20 +226,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func makePlatform() -> (){
         
         let platform = SKSpriteNode(imageNamed: platformNames.randomElement()!)
+        platform.setScale(2)
         platform.zPosition = 2
         platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.allowsRotation = false
         platform.physicsBody?.affectedByGravity = false
         platform.physicsBody?.categoryBitMask = PhysicsCategory.Wall
-        platform.physicsBody?.collisionBitMask = 0
+        platform.physicsBody?.collisionBitMask = PhysicsCategory.Wall
+        platform.physicsBody?.contactTestBitMask = PhysicsCategory.Wall
         let randomX = randomPos.nextInt()
         if platformGroup.isEmpty{
-            platform.position = CGPoint(x: randomX , y: Int(santa.position.y+250))
+            platform.position = CGPoint(x: randomX , y: Int(santa.position.y+200))
         }
         else
         {
-            platform.position = CGPoint(x: randomX , y: Int(platformGroup.last!.position.y+250))
+            platform.position = CGPoint(x: randomX , y: Int(platformGroup.last!.position.y+200))
         }
         //print("Platform generated at \(platform.position)") //Test per posizione di generazione piattaforme
         addChild(platform)
@@ -257,7 +272,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let randomElement = randomBackground.nextInt()
         let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
         background.zPosition = -10
-        background.setScale(6)
         if backgroundGroup.isEmpty{
             background.position = CGPoint(x: 0, y:-768)
         }
@@ -287,9 +301,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if(height > highest){
             highest = height
         }
-        let labelHeight = santa.position.y + 1240
+        let labelHeight = cam.position.y + 700
         highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
         highscoreLabel.text = "Score: "  + String(highest)
-        
+    }
+    
+    func killzoneCreation(){
+        addChild(killzone)
+        addChild(fire)
+        fire.setScale(6)
+        killzone.xScale = 100
+        killzone.physicsBody = SKPhysicsBody(rectangleOf: killzone.size)
+        killzone.alpha = 0
+        killzone.physicsBody?.isDynamic = false
+        killzone.physicsBody?.categoryBitMask = PhysicsCategory.Fire
+        killzone.physicsBody?.collisionBitMask = PhysicsCategory.Fire
+        killzone.physicsBody?.contactTestBitMask = PhysicsCategory.Fire
+    }
+    
+    func killzoneUpdate(){
+        let kzHeight = Int(santa.position.y)-400
+        if(kzHeight > killzoneHeight){
+            killzoneHeight = kzHeight
+        }
+        killzone.position = CGPoint(x: 0, y: killzoneHeight)
+        fire.position = CGPoint(x: 0, y: killzoneHeight+400)
     }
 }
