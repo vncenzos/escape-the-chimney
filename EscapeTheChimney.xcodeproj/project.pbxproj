@@ -16,6 +16,7 @@
 		4F411404293E46A100DE8B79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F411403293E46A100DE8B79 /* Assets.xcassets */; };
 		4F411407293E46A100DE8B79 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F411405293E46A100DE8B79 /* LaunchScreen.storyboard */; };
 		4F590BA629450652009DC43E /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F590BA529450652009DC43E /* Minecraft.ttf */; };
+		4F920EB72947248500DEF911 /* GameEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F920EB62947248500DEF911 /* GameEntities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		4F411406293E46A100DE8B79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F590BA529450652009DC43E /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Minecraft.ttf; path = ../../../../Downloads/Minecraft.ttf; sourceTree = "<group>"; };
 		4F590BA729450680009DC43E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4F920EB62947248500DEF911 /* GameEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEntities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				4F4113F6293E46A000DE8B79 /* AppDelegate.swift */,
 				4F4113F8293E46A000DE8B79 /* GameScene.sks */,
 				4F4113FC293E46A000DE8B79 /* GameScene.swift */,
+				4F920EB62947248500DEF911 /* GameEntities.swift */,
 				4F4113FA293E46A000DE8B79 /* Actions.sks */,
 				4F4113FE293E46A000DE8B79 /* GameViewController.swift */,
 				4F411400293E46A000DE8B79 /* Main.storyboard */,
@@ -150,6 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F920EB72947248500DEF911 /* GameEntities.swift in Sources */,
 				4F4113FD293E46A000DE8B79 /* GameScene.swift in Sources */,
 				4F4113FF293E46A000DE8B79 /* GameViewController.swift in Sources */,
 				4F4113F7293E46A000DE8B79 /* AppDelegate.swift in Sources */,
