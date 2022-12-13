@@ -16,7 +16,7 @@ extension GameScene {
         
         santa.position = CGPoint(x:0, y:-645)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
-        santa.zPosition = 20
+        santa.zPosition = 200
         santa.physicsBody?.isDynamic = true
         santa.physicsBody?.allowsRotation = false
         santa.physicsBody?.affectedByGravity = true
@@ -37,7 +37,7 @@ extension GameScene {
         let platformTexture = SKTexture(imageNamed: platformName!)
         let platform = SKSpriteNode(imageNamed: platformName!)
         platform.setScale(2)
-        platform.zPosition = 2
+        platform.zPosition = 150
         let randomX = randomPos.nextInt()
         if platformGroup.isEmpty{
             platform.position = CGPoint(x: randomX , y: Int(santa.position.y+200))
@@ -56,7 +56,7 @@ extension GameScene {
         
         let spring = SKSpriteNode(imageNamed: "SpringPH")
         spring.zPosition = 3
-        spring.alpha = 1
+        spring.alpha = 0
         spring.xScale = 6
         spring.physicsBody = SKPhysicsBody(rectangleOf: spring.size)
         spring.position = CGPoint(x: position.x, y: position.y+5)
@@ -74,7 +74,8 @@ extension GameScene {
     
     func makeBackground(){
         let randomElement = randomBackground.nextInt()
-        let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
+        let background = SKSpriteNode(imageNamed: "MuroDefinitivo")
+  //      let background = SKSpriteNode(imageNamed: backgroundNames[randomElement])
         background.zPosition = -10
         if backgroundGroup.isEmpty{
             background.position = CGPoint(x: 0, y:-900)
@@ -91,7 +92,7 @@ extension GameScene {
     
     func highscoreCreation(){
         
-        highscoreLabel.zPosition = 10
+        highscoreLabel.zPosition = 200
         highscoreLabel.verticalAlignmentMode = .center
         highscoreLabel.fontName = "Minecraft"
         highscoreLabel.setScale(2)
@@ -111,12 +112,29 @@ extension GameScene {
         
     }
     
-    func killzoneCreation(){
+    func timerCreation(){
         
-        addChild(killzone)
-        addChild(fire)
-        fire.setScale(6)
-        fire.zPosition = 30
+        timeLabel.zPosition = 200
+        timeLabel.verticalAlignmentMode = .center
+        timeLabel.fontName = "Minecraft"
+        timeLabel.setScale(2)
+        addChild(timeLabel)
+        
+    }
+    
+    func timerUpdate(time : Double){
+        var timer = time - 139000
+        let labelHeight = cam.position.y + 700
+        timeLabel.position = CGPoint(x: 0, y: labelHeight-60)
+        timeLabel.text = "Time: "  + String(timer)
+        
+    }
+    
+    func killzoneCreation(){
+        shadow = SKSpriteNode(texture: shadowTexture)
+        fire = SKSpriteNode(texture: fireTexture)
+        shadow.zPosition = 30
+        fire.zPosition = 175
         killzone.xScale = 100
         killzone.physicsBody = SKPhysicsBody(rectangleOf: killzone.size)
         killzone.alpha = 0
@@ -124,6 +142,12 @@ extension GameScene {
         killzone.physicsBody?.categoryBitMask = PhysicsCategory.DeleteBox
         killzone.physicsBody?.collisionBitMask = PhysicsCategory.None
         killzone.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        addChild(killzone)
+        addChild(fire)
+        addChild(shadow)
+        
+        startFireAnimation()
+        startShadowAnimation()
         
     }
     
@@ -134,7 +158,8 @@ extension GameScene {
             killzoneHeight = kzHeight
         }
         killzone.position = CGPoint(x: 0, y: killzoneHeight)
-        fire.position = CGPoint(x: 0, y: killzoneHeight+400)
+        fire.position = CGPoint(x: 0, y: killzoneHeight+180)
+        shadow.position = CGPoint(x:0, y: killzoneHeight+1450)
         
     }
     

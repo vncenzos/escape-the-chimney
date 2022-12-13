@@ -5,7 +5,6 @@
 //  Created by Eleonora Ballarini on 12/12/22.
 //
 
-import Foundation
 import SpriteKit
 
 class GameOverScene: SKScene {
@@ -36,13 +35,10 @@ class GameOverScene: SKScene {
         let sequence = SKAction.sequence([outAction, inAction])
         
         tapLabel.run(SKAction.repeatForever(sequence))
-        
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        let gameScene = GameScene(size: self.size)
-        view?.presentScene(gameScene)
-        
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+             let gameScene = GameScene(size: self.size)
+             view?.presentScene(gameScene)
+         }
     }
-}

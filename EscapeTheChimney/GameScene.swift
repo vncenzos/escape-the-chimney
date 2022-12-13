@@ -36,18 +36,21 @@ struct PhysicsCategory {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    //Dichiarazione canzone
-    let canzone = SKAction.playSoundFileNamed("SantaEscapeTheme", waitForCompletion: false)
-    //  let jumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
-    
     //Dichiarazione telecamera
     let cam = SKCameraNode()
     
-    //Dichiarare sprite entità qui
+    //Dichiarazione sounds
+    let jump_1 = SKAction.playSoundFileNamed("jump_1", waitForCompletion: false)
+    let jump_2 = SKAction.playSoundFileNamed("jump_2", waitForCompletion: false)
+
+    //Dichiarazione canzone
+    let canzone = SKAction.playSoundFileNamed("SantaEscapeTheme", waitForCompletion: false)
+    
+    //Dichiarare entità qui
     var bounds : [SKSpriteNode] = [SKSpriteNode(imageNamed: "SpringPH"), SKSpriteNode(imageNamed: "SpringPH")]
     var ground = SKSpriteNode(imageNamed: "platform3")
     var killzone = SKSpriteNode(imageNamed: "SpringPH")
-    var fire = SKSpriteNode(imageNamed: "fuoco1")
+    var timeLabel = SKLabelNode()
     var highscoreLabel = SKLabelNode()
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
@@ -55,6 +58,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var backgroundGroup = [SKNode]()
     var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
     var soundNode = SKNode()
+    //Dichiarare entità animate qui
+    var fire : SKSpriteNode!
+    var shadow : SKSpriteNode!
     
     //Variabile per il primo salto
     var firstJump = true
@@ -92,11 +98,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for _ in 1...10 {
             makeBackground()
         }
+        //Creazione timeLabel
+        timerCreation()
         //Creazione highscoreLabel
         highscoreCreation()
         //Creazione killzone
         killzoneCreation()
-        
         //play canzone
         playSound(sound: canzone)
     }
@@ -139,6 +146,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
+        //Aggiornamento timer
+        timerUpdate(time: currentTime)
         //Aggiornamento highscore
         highscoreUpdate()
         //Aggiornamento killzone
@@ -180,7 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Switch per direzione asse Y (salto)
         switch (jumpState) {
         case .Jump:
-            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 160))
+            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 120))
             firstJump = false
             jumpState = .None
             makePlatform()
@@ -224,18 +233,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             santa.physicsBody?.velocity = CGVectorMake(-500, yVelocity!);
         }
         let xVelocity : CGFloat? = santa.physicsBody?.velocity.dx
-        if ((santa.physicsBody?.velocity.dy)! > 1000.00) {
-            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, 1000);
+        if ((santa.physicsBody?.velocity.dy)! > 900.00) {
+            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, 900);
         }
-        if ((santa.physicsBody?.velocity.dy)! < -1000.00) {
-            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, -1000);
+        if ((santa.physicsBody?.velocity.dy)! < -2000.00) {
+            santa.physicsBody?.velocity = CGVectorMake(xVelocity!, -2000);
         }
     }
     
-    //Funzione start canzone
-    func playSound(sound : SKAction){
-        run(sound)
-    }
     
     //Funzione GameOver
     func gameOver() {
