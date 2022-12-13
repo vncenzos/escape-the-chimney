@@ -39,6 +39,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Dichiarazione telecamera
     let cam = SKCameraNode()
     
+    //Dichiarazione timer
+   // var timer = Timer
     //Dichiarazione sounds
     let jump_1 = SKAction.playSoundFileNamed("jump_1", waitForCompletion: false)
     let jump_2 = SKAction.playSoundFileNamed("jump_2", waitForCompletion: false)
@@ -65,7 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Variabile per il primo salto
     var firstJump = true
     //Distribuzione randomica asse x
-    var randomPos = GKRandomDistribution(lowestValue: -270, highestValue: 270)
+    var randomPos = GKRandomDistribution(lowestValue: -260, highestValue: 260)
     
     //Distribuzione gaussiana per background
     var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 26)
@@ -79,7 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
-        
+
         camera = cam //Assegnazione telecamera
         
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
@@ -146,6 +148,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
+//        var updateTime: Double = 0
+//        if updateTime == 0 {
+//                    updateTime = currentTime
+//                }
+//
+//                if currentTime - updateTime > 1 {
+//                    print("wow!")
+//                    updateTime = currentTime
+//                }
         //Aggiornamento timer
         timerUpdate(time: currentTime)
         //Aggiornamento highscore
@@ -204,7 +215,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Funzione morte di babbo
     func santaDeath() {
         soundNode.removeAllActions()
-        soundNode.removeFromParent()
         santa.removeFromParent()
         gameOver()
     }

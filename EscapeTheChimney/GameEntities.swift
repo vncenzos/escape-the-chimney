@@ -123,10 +123,9 @@ extension GameScene {
     }
     
     func timerUpdate(time : Double){
-        var timer = time - 139000
         let labelHeight = cam.position.y + 700
         timeLabel.position = CGPoint(x: 0, y: labelHeight-60)
-        timeLabel.text = "Time: "  + String(timer)
+        timeLabel.text = "Time: "  + String(time)
         
     }
     
@@ -158,8 +157,8 @@ extension GameScene {
             killzoneHeight = kzHeight
         }
         killzone.position = CGPoint(x: 0, y: killzoneHeight)
-        fire.position = CGPoint(x: 0, y: killzoneHeight+180)
-        shadow.position = CGPoint(x:0, y: killzoneHeight+1450)
+        fire.position = CGPoint(x: 0, y: killzoneHeight+170)
+        shadow.position = CGPoint(x:0, y: killzoneHeight+1475)
         
     }
     

@@ -47,11 +47,12 @@ extension GameScene{
     
     
     func startFireAnimation() {
-        let fireAnimation = SKAction.animate(with: fireTextures, timePerFrame: 0.05)
+        let fireAnimation = SKAction.animate(with: fireTextures, timePerFrame: 0.1)
         fire.run(SKAction.repeatForever(fireAnimation), withKey: "fireAnimation")
     }
     func startShadowAnimation() {
-        let shadowAnimation = SKAction.animate(with: shadowTextures, timePerFrame: 0.05)
+        let shadowAnimation = SKAction.animate(with: shadowTextures, timePerFrame: 0.1)
         shadow.run(SKAction.repeatForever(shadowAnimation), withKey: "shadowAnimation")
     }
 }
+

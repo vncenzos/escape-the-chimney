@@ -17,7 +17,7 @@ class GameOverScene: SKScene {
         addChild(background)
         
         gameOver.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        gameOver.setScale(0.5)
+        gameOver.setScale(0.75)
         gameOver.zPosition = 5
         addChild(gameOver)
         
