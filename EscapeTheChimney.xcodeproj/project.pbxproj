@@ -18,6 +18,7 @@
 		4F590BA629450652009DC43E /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F590BA529450652009DC43E /* Minecraft.ttf */; };
 		4F920EB72947248500DEF911 /* GameEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F920EB62947248500DEF911 /* GameEntities.swift */; };
 		4F920EBD2947497A00DEF911 /* SantaEscapeTheme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */; };
+		4FAC3FB529487947007F0121 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAC3FB429487947007F0121 /* GameOverScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		4F590BA729450680009DC43E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4F920EB62947248500DEF911 /* GameEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEntities.swift; sourceTree = "<group>"; };
 		4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SantaEscapeTheme.mp3; sourceTree = "<group>"; };
+		4FAC3FB429487947007F0121 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				4F4113F6293E46A000DE8B79 /* AppDelegate.swift */,
 				4F4113F8293E46A000DE8B79 /* GameScene.sks */,
 				4F4113FC293E46A000DE8B79 /* GameScene.swift */,
+				4FAC3FB429487947007F0121 /* GameOverScene.swift */,
 				4F920EB62947248500DEF911 /* GameEntities.swift */,
 				4F4113FA293E46A000DE8B79 /* Actions.sks */,
 				4F4113FE293E46A000DE8B79 /* GameViewController.swift */,
@@ -157,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FAC3FB529487947007F0121 /* GameOverScene.swift in Sources */,
 				4F920EB72947248500DEF911 /* GameEntities.swift in Sources */,
 				4F4113FD293E46A000DE8B79 /* GameScene.swift in Sources */,
 				4F4113FF293E46A000DE8B79 /* GameViewController.swift in Sources */,
@@ -310,6 +314,7 @@
 				DEVELOPMENT_TEAM = 6A727QFG56;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EscapeTheChimney/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Santa Escape";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -340,6 +345,7 @@
 				DEVELOPMENT_TEAM = 6A727QFG56;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EscapeTheChimney/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Santa Escape";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

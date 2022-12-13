@@ -14,7 +14,7 @@ extension GameScene {
     //Propietà di Babbo Natale
     func makeSanta(){
         
-        santa.position = CGPoint(x:0, y:-625)
+        santa.position = CGPoint(x:0, y:-645)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
         santa.zPosition = 20
         santa.physicsBody?.isDynamic = true
@@ -114,9 +114,11 @@ extension GameScene {
         let labelHeight = cam.position.y + 700
         highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
         highscoreLabel.text = "Score: "  + String(highest)
+        
     }
     
     func killzoneCreation(){
+        
         addChild(killzone)
         addChild(fire)
         fire.setScale(6)
@@ -128,15 +130,63 @@ extension GameScene {
         killzone.physicsBody?.categoryBitMask = PhysicsCategory.Fire
         killzone.physicsBody?.collisionBitMask = PhysicsCategory.Fire
         killzone.physicsBody?.contactTestBitMask = PhysicsCategory.Fire
+        
     }
     
     func killzoneUpdate(){
+        
         let kzHeight = Int(santa.position.y)-400
         if(kzHeight > killzoneHeight){
             killzoneHeight = kzHeight
         }
         killzone.position = CGPoint(x: 0, y: killzoneHeight)
         fire.position = CGPoint(x: 0, y: killzoneHeight+400)
+        
+    }
+    
+    func makeGround(){
+        
+        ground.position = CGPoint(x: 0, y: santa.position.y-32)
+        ground.zPosition = 5
+        ground.setScale(2)
+        ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
+        ground.physicsBody?.isDynamic = false
+        ground.physicsBody?.allowsRotation = false
+        ground.physicsBody?.affectedByGravity = false
+        addChild(ground)
+        
+    }
+    
+    func makeBounds(){
+        
+        bounds[0].position = CGPoint(x: -100, y: -645)
+        bounds[0].zPosition = 90
+        bounds[0].yScale = 100
+        bounds[0].physicsBody = SKPhysicsBody(rectangleOf: bounds[1].size)
+        bounds[0].physicsBody?.isDynamic = false
+        bounds[0].physicsBody?.allowsRotation = false
+        bounds[0].physicsBody?.affectedByGravity = false
+        bounds[0].physicsBody?.contactTestBitMask = 4294967295
+        bounds[0].physicsBody?.collisionBitMask = 4294967295
+        bounds[0].physicsBody?.categoryBitMask = 4294967295
+        addChild(bounds[0])
+        bounds[1].position = CGPoint(x: -100, y: -645)
+        bounds[1].zPosition = 90
+        bounds[1].yScale = 100
+        bounds[1].physicsBody = SKPhysicsBody(rectangleOf: bounds[1].size)
+        bounds[1].physicsBody?.isDynamic = false
+        bounds[1].physicsBody?.allowsRotation = false
+        bounds[1].physicsBody?.affectedByGravity = false
+        bounds[1].physicsBody?.contactTestBitMask = 4294967295
+        bounds[1].physicsBody?.collisionBitMask = 4294967295
+        bounds[1].physicsBody?.categoryBitMask = 4294967295
+        addChild(bounds[1])
+        
+    }
+    
+    func updateBounds(){
+        bounds[0].position = CGPoint(x: -300, y: santa.position.y)
+        bounds[1].position = CGPoint(x: 300, y: santa.position.y)
     }
 }
 

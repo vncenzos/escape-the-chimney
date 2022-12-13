@@ -43,6 +43,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cam = SKCameraNode()
 
     //Dichiarare sprite entità qui
+    var bounds : [SKSpriteNode] = [SKSpriteNode(imageNamed: "SpringPH"), SKSpriteNode(imageNamed: "SpringPH")]
+    var ground = SKSpriteNode(imageNamed: "platform3")
     var killzone = SKSpriteNode(imageNamed: "SpringPH")
     var fire = SKSpriteNode(imageNamed: "fuoco1")
     var highscoreLabel = SKLabelNode()
@@ -66,8 +68,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ]
     }
     
+    var firstJump = true
     //Distribuzione randomica asse x
-    var randomPos = GKRandomDistribution(lowestValue: -320, highestValue: 320)
+    var randomPos = GKRandomDistribution(lowestValue: -270, highestValue: 270)
     
     //Distribuzione gaussiana per background
     var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 26)
@@ -82,12 +85,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
         
+        touchLocation = .None
+        
         camera = cam //Assegnazione telecamera
         
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
         
+        
         //Creazione di Nabbo Batale
         makeSanta()
+        //Creazione dei limiti di livello
+        makeBounds()
+        //Creazione della piattaforma base
+        makeGround()
         //Creazione di piattaforme iniziali
         for _ in 1...10 {
             makePlatform()
@@ -111,19 +121,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             if location.x < CGRectGetMidX(self.frame) {
                 touchLocation = .Left
+                if(firstJump){ jumpState = .Jump }
             } else if location.x > CGRectGetMidX(self.frame) {
                 touchLocation = .Right
+                if(firstJump){ jumpState = .Jump }
             }
         }
     }
     //Chiamata quando tocchi muovi il dito sullo schermo
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchLocation = .None
         for touch:AnyObject in touches {
             let location = touch.location(in: self)
             if location.x < CGRectGetMidX(self.frame) {
                 touchLocation = .Left
+                if(firstJump){ jumpState = .Jump }
             } else if location.x > CGRectGetMidX(self.frame) {
                 touchLocation = .Right
+                if(firstJump){ jumpState = .Jump}
             }
         }
     }
@@ -139,17 +154,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         //Aggiornamento highscore
         highscoreUpdate()
+        //Aggiornamento limiti di livello
+        updateBounds()
         //Aggiornamento killzone
         killzoneUpdate()
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
         cam.position.y = CGFloat(highest) - 200
-        cam.position.x = 5
+        cam.position.x = 0
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
         if((santa.physicsBody?.velocity.dy)!>1){
-            santa.physicsBody?.collisionBitMask = 0
-            santa.physicsBody?.categoryBitMask = 0
+            santa.physicsBody?.collisionBitMask = PhysicsCategory.None
+            santa.physicsBody?.categoryBitMask = PhysicsCategory.None
         }
         else
         {
@@ -173,6 +190,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switch (jumpState) {
         case .Jump:
             santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
+            firstJump = false
             jumpState = .None
             makePlatform()
             makeBackground()
@@ -186,6 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Funzione morte di babbo
     func santaDeath() {
         santa.removeFromParent()
+        gameOver()
     }
     
     //Funzione attiva su ogni contatto tra oggetti
@@ -223,8 +242,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Funzione start canzone
     func playSound(sound : SKAction){
         run(sound)
     }
+    
+    //Funzione GameOver
+    func gameOver() {
+        
+            let gameOverScene = GameOverScene(size: self.size)
+            view?.presentScene(gameOverScene)
+        
+        }
 }
 
