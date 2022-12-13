@@ -31,10 +31,12 @@ extension GameScene {
     //Proprietà delle piattaforme
     func makePlatform() -> (){
         
-        let platform = SKSpriteNode(imageNamed: platformNames.randomElement()!)
+        let platformName = platformNames.randomElement()
+        let platformTexture = SKTexture(imageNamed: platformName!)
+        let platform = SKSpriteNode(imageNamed: platformName!)
         platform.setScale(2)
         platform.zPosition = 2
-        platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
+        platform.physicsBody = SKPhysicsBody(texture: platformTexture, alphaThreshold: 0.99, size: platform.size)
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.allowsRotation = false
         platform.physicsBody?.affectedByGravity = false

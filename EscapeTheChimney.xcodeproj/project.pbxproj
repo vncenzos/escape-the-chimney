@@ -17,6 +17,7 @@
 		4F411407293E46A100DE8B79 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F411405293E46A100DE8B79 /* LaunchScreen.storyboard */; };
 		4F590BA629450652009DC43E /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F590BA529450652009DC43E /* Minecraft.ttf */; };
 		4F920EB72947248500DEF911 /* GameEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F920EB62947248500DEF911 /* GameEntities.swift */; };
+		4F920EBD2947497A00DEF911 /* SantaEscapeTheme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		4F590BA529450652009DC43E /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Minecraft.ttf; path = ../../../../Downloads/Minecraft.ttf; sourceTree = "<group>"; };
 		4F590BA729450680009DC43E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4F920EB62947248500DEF911 /* GameEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEntities.swift; sourceTree = "<group>"; };
+		4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SantaEscapeTheme.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				4F411403293E46A100DE8B79 /* Assets.xcassets */,
 				4F411405293E46A100DE8B79 /* LaunchScreen.storyboard */,
 				4F590BA529450652009DC43E /* Minecraft.ttf */,
+				4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */,
 			);
 			path = EscapeTheChimney;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 				4F4113F9293E46A000DE8B79 /* GameScene.sks in Resources */,
 				4F411404293E46A100DE8B79 /* Assets.xcassets in Resources */,
 				4F411407293E46A100DE8B79 /* LaunchScreen.storyboard in Resources */,
+				4F920EBD2947497A00DEF911 /* SantaEscapeTheme.mp3 in Resources */,
 				4F4113FB293E46A000DE8B79 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
