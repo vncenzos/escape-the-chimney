@@ -23,25 +23,26 @@ enum JumpState {
 //Dichiarare categorie di collisione ( in binario )
 struct PhysicsCategory {
     static let None: UInt32 = 0
-    static let Wall: UInt32 = 0b1 // 1
-    static let Santa: UInt32 = 0b10 // 2
-    static let Fire: UInt32 = 0b11 // 3
+    static let Player: UInt32 = 0b1 // 1
+    static let Collidable: UInt32 = 0b10 // 2
+    static let Intersecable: UInt32 = 0b11 // 3
     static let Cookie: UInt32 = 0b100 // 4
     static let Milk: UInt32 = 0b101 // 5
     static let Spring: UInt32 = 0b110 // 6
     static let Background: UInt32 = 0b111 // 7
     static let DeleteBox: UInt32 = 0b1000 // 8
+    static let Intangible: UInt32 = 0b1001 // 9
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Dichiarazione canzone
     let canzone = SKAction.playSoundFileNamed("SantaEscapeTheme", waitForCompletion: false)
-  //  let jumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
+    //  let jumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
     
     //Dichiarazione telecamera
     let cam = SKCameraNode()
-
+    
     //Dichiarare sprite entità qui
     var bounds : [SKSpriteNode] = [SKSpriteNode(imageNamed: "SpringPH"), SKSpriteNode(imageNamed: "SpringPH")]
     var ground = SKSpriteNode(imageNamed: "platform3")
@@ -55,19 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
     var soundNode = SKNode()
     
-    private var fireballAtlas: SKTextureAtlas {
-        return SKTextureAtlas(named: "fireball")
-    }
-    
-    private var fireballTextures: [SKTexture] {
-        return [
-            fireballAtlas.textureNamed("idle_1"),
-            fireballAtlas.textureNamed("idle_2"),
-            fireballAtlas.textureNamed("idle_3"),
-            fireballAtlas.textureNamed("idle_2")
-        ]
-    }
-    
+    //Variabile per il primo salto
     var firstJump = true
     //Distribuzione randomica asse x
     var randomPos = GKRandomDistribution(lowestValue: -270, highestValue: 270)
@@ -85,12 +74,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
         
-        touchLocation = .None
-        
         camera = cam //Assegnazione telecamera
         
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
-        
         
         //Creazione di Nabbo Batale
         makeSanta()
@@ -117,6 +103,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata quando tocchi lo schermo
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchLocation = .None
         for touch:AnyObject in touches {
             let location = touch.location(in: self)
             if location.x < CGRectGetMidX(self.frame) {
@@ -154,8 +141,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         //Aggiornamento highscore
         highscoreUpdate()
-        //Aggiornamento limiti di livello
-        updateBounds()
         //Aggiornamento killzone
         killzoneUpdate()
         //Aggiornamento telecamera
@@ -164,18 +149,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position.x = 0
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
+        
         if((santa.physicsBody?.velocity.dy)!>1){
-            santa.physicsBody?.collisionBitMask = PhysicsCategory.None
-            santa.physicsBody?.categoryBitMask = PhysicsCategory.None
+            santa.physicsBody?.categoryBitMask = PhysicsCategory.Intangible
+            santa.physicsBody?.contactTestBitMask = PhysicsCategory.Intersecable
+            santa.physicsBody?.collisionBitMask = PhysicsCategory.Intangible
         }
         else
         {
-            santa.physicsBody?.collisionBitMask = PhysicsCategory.Santa
-            santa.physicsBody?.categoryBitMask = PhysicsCategory.Santa
+            santa.physicsBody?.categoryBitMask = PhysicsCategory.Player
+            santa.physicsBody?.contactTestBitMask = PhysicsCategory.Intersecable
+            santa.physicsBody?.collisionBitMask = PhysicsCategory.Collidable
+            
         }
         
+        //Aggiornamento limiti di livello
+        updateBounds()
+        
         //Switch per direzione asse X
-        // print(character.physicsBody?.velocity) // Usare per misure velocità personaggio
         switch (touchLocation) {
         case .Left:
             santa.physicsBody?.applyImpulse(CGVector(dx: -movespeed, dy: 0))
@@ -189,7 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Switch per direzione asse Y (salto)
         switch (jumpState) {
         case .Jump:
-            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
+            santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 160))
             firstJump = false
             jumpState = .None
             makePlatform()
@@ -203,23 +194,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     //Funzione morte di babbo
     func santaDeath() {
+        soundNode.removeAllActions()
+        soundNode.removeFromParent()
         santa.removeFromParent()
         gameOver()
     }
     
     //Funzione attiva su ogni contatto tra oggetti
     func didBegin(_ contact: SKPhysicsContact) {
-        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask //Prende contatto di oggetto A e B
-        if collision == PhysicsCategory.Santa | PhysicsCategory.Cookie {
-            //  cookieGet()
-        }
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask//Prende contatto di oggetto A e B
         //Contatto tra babbo e fuoco = Morte
-        if collision == PhysicsCategory.Santa | PhysicsCategory.Fire {
+        if collision == PhysicsCategory.Player | PhysicsCategory.DeleteBox {
             print("Contact between santa and fire")
             santaDeath()
         }
         //Contatto tra babbo e piattaforma = Salto
-        if collision == PhysicsCategory.Santa | PhysicsCategory.Spring {
+        if collision == PhysicsCategory.Player | PhysicsCategory.Spring {
             print("Contact between santa and spring")
             jumpState = .Jump
         }
@@ -229,14 +219,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let yVelocity : CGFloat? = santa.physicsBody?.velocity.dy
         if ((santa.physicsBody?.velocity.dx)! > 500.00) {
             santa.physicsBody?.velocity = CGVectorMake(500, yVelocity!);
-         }
+        }
         if ((santa.physicsBody?.velocity.dx)! < -500.00) {
             santa.physicsBody?.velocity = CGVectorMake(-500, yVelocity!);
         }
         let xVelocity : CGFloat? = santa.physicsBody?.velocity.dx
         if ((santa.physicsBody?.velocity.dy)! > 1000.00) {
             santa.physicsBody?.velocity = CGVectorMake(xVelocity!, 1000);
-         }
+        }
         if ((santa.physicsBody?.velocity.dy)! < -1000.00) {
             santa.physicsBody?.velocity = CGVectorMake(xVelocity!, -1000);
         }
@@ -249,10 +239,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Funzione GameOver
     func gameOver() {
+        let gameOverScene = GameOverScene(size: self.size)
+        view?.presentScene(gameOverScene)
         
-            let gameOverScene = GameOverScene(size: self.size)
-            view?.presentScene(gameOverScene)
-        
-        }
+    }
 }
 
