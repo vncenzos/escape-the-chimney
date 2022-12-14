@@ -20,6 +20,9 @@ extension GameScene{
     var fireballAtlas: SKTextureAtlas {
        return SKTextureAtlas(named: "fireball")
    }
+    var indicatorAtlas: SKTextureAtlas {
+       return SKTextureAtlas(named: "indicator")
+   }
     
     //DICHIARAZIONE TEXTURE BASE QUI
      var fireTexture: SKTexture {
@@ -30,6 +33,9 @@ extension GameScene{
     }
     var fireballTexture: SKTexture {
        return fireballAtlas.textureNamed("fireball_1")
+    }
+    var indicatorTexture: SKTexture {
+       return indicatorAtlas.textureNamed("indicator_1")
     }
     
     //DICHIARAZIONE FRAME ANIMAZIONE QUI
@@ -71,7 +77,7 @@ extension GameScene{
         shadow.run(SKAction.repeatForever(shadowAnimation), withKey: "shadowAnimation")
     }
     func startFireballAnimation() {
-        let fireballAnimation = SKAction.animate(with: fireballTextures, timePerFrame: 0.2)
+        let fireballAnimation = SKAction.animate(with: fireballTextures, timePerFrame: 0.3)
         fireball.run(SKAction.repeat(fireballAnimation, count: 1))
     }
 }

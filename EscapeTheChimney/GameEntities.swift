@@ -16,7 +16,7 @@ extension GameScene {
         
         santa.position = CGPoint(x:0, y:-645)
         santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
-        santa.zPosition = 200
+        santa.zPosition = 199
         santa.physicsBody?.isDynamic = true
         santa.physicsBody?.allowsRotation = false
         santa.physicsBody?.affectedByGravity = true
@@ -220,11 +220,11 @@ extension GameScene {
 
     }
     
-    func createFireball(position: CGPoint){
+    func createFireball(){
         fireball = SKSpriteNode(texture: fireballTexture)
         fireball.zPosition = 15
         fireball.setScale(0.75)
-        fireball.position = CGPoint(x: position.x, y: killzone.position.y)
+        fireball.position = CGPoint(x: indicator.position.x, y: killzone.position.y)
         fireball.physicsBody = SKPhysicsBody(circleOfRadius: 5)
         fireball.physicsBody?.affectedByGravity = true
         fireball.physicsBody?.allowsRotation = false
@@ -232,14 +232,17 @@ extension GameScene {
         fireball.physicsBody?.collisionBitMask = PhysicsCategory.None
         fireball.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         addChild(fireball)
-        fireball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 4))
+        fireball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 7))
         startFireballAnimation()
         playSound(sound: fireballSound)
     }
     
-    func createIndicator() -> CGPoint {
-        var position : CGPoint! = CGPoint(x: santa.position.x, y: santa.position.y)
-        return position
+    func createIndicator() {
+        indicator = SKSpriteNode(texture: indicatorTexture)
+        indicator.position = CGPoint(x: santa.position.x, y: santa.position.y+100)
+        indicator.zPosition = 200
+        indicator.setScale(1.5)
+        addChild(indicator)
     }
 }
 

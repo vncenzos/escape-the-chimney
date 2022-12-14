@@ -40,15 +40,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Dichiarazione telecamera
     let cam = SKCameraNode()
     
-    //Dichiarazione timer
-   // var timer = Timer
-    //Dichiarazione sounds
-    let jump_1 = SKAction.playSoundFileNamed("jump_1", waitForCompletion: false)
-    let jump_2 = SKAction.playSoundFileNamed("jump_2", waitForCompletion: false)
-
     //Dichiarazione canzone
     var songPlayer: AVAudioPlayer?
     
+    //Dichiarazione suoni
     let jumpSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
     let fireballSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
     
@@ -63,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
     var backgroundGroup = [SKNode]()
     var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
+    
     //Nodo per SFX
     var soundNode = SKNode()
     
@@ -91,11 +87,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
-
+        
         //Play della canzone
         let ostPath = Bundle.main.path(forResource: "SantaEscapeTheme.mp3", ofType:nil)!
         let ostUrl = URL(fileURLWithPath: ostPath)
         songPlayer = try! AVAudioPlayer(contentsOf: ostUrl)
+        songPlayer?.setVolume(0.1, fadeDuration: 0)
         songPlayer?.play()
         
         camera = cam //Assegnazione telecamera
@@ -129,10 +126,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         touchLocation = .None
         for touch:AnyObject in touches {
             let location = touch.location(in: self)
-            if location.x < CGRectGetMidX(self.frame) {
+            if location.x < 0 {
                 touchLocation = .Left
                 if(firstJump){ jumpState = .Jump }
-            } else if location.x > CGRectGetMidX(self.frame) {
+            } else if location.x > 0 {
+                print("Destra - ")
                 touchLocation = .Right
                 if(firstJump){ jumpState = .Jump }
             }
@@ -143,13 +141,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         touchLocation = .None
         for touch:AnyObject in touches {
             let location = touch.location(in: self)
-            if location.x < CGRectGetMidX(self.frame) {
+            if location.x < 0 {
                 touchLocation = .Left
                 if(firstJump){ jumpState = .Jump }
-            } else if location.x > CGRectGetMidX(self.frame) {
+            } else if location.x > 0 {
                 touchLocation = .Right
                 if(firstJump){ jumpState = .Jump}
             }
+            print(location.x)
         }
     }
     //Chiamata quando finisci di toccare lo schermo
@@ -163,14 +162,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
         if updateTime == 0 {
-                    updateTime = currentTime
-                }
-                if currentTime - updateTime > 5 {
-                    //Eseguire al timer
-                    var fbPos = createIndicator()
-                    createFireball(position: fbPos)
-                    updateTime = currentTime
-                }
+            updateTime = currentTime
+        }
+        if currentTime - updateTime > 6 {
+            //Eseguire al timer
+            createIndicator()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.createFireball()
+            }
+            
+                updateTime = currentTime
+        }
         //Aggiornamento timer
         timerUpdate(time: currentTime)
         //Aggiornamento highscore
