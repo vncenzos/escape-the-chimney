@@ -118,6 +118,7 @@ extension GameScene {
         timeLabel.verticalAlignmentMode = .center
         timeLabel.fontName = "Minecraft"
         timeLabel.setScale(2)
+        timeLabel.alpha = 0
         addChild(timeLabel)
         
     }
@@ -217,6 +218,28 @@ extension GameScene {
             bounds[1].physicsBody?.categoryBitMask = PhysicsCategory.Collidable
         }
 
+    }
+    
+    func createFireball(position: CGPoint){
+        fireball = SKSpriteNode(texture: fireballTexture)
+        fireball.zPosition = 15
+        fireball.setScale(0.75)
+        fireball.position = CGPoint(x: position.x, y: killzone.position.y)
+        fireball.physicsBody = SKPhysicsBody(circleOfRadius: 5)
+        fireball.physicsBody?.affectedByGravity = true
+        fireball.physicsBody?.allowsRotation = false
+        fireball.physicsBody?.categoryBitMask = PhysicsCategory.DeleteBox
+        fireball.physicsBody?.collisionBitMask = PhysicsCategory.None
+        fireball.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        addChild(fireball)
+        fireball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 4))
+        startFireballAnimation()
+        playSound(sound: fireballSound)
+    }
+    
+    func createIndicator() -> CGPoint {
+        var position : CGPoint! = CGPoint(x: santa.position.x, y: santa.position.y)
+        return position
     }
 }
 

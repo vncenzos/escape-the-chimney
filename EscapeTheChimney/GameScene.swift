@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 //Stati del tocco
 enum TouchState {
@@ -46,7 +47,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let jump_2 = SKAction.playSoundFileNamed("jump_2", waitForCompletion: false)
 
     //Dichiarazione canzone
-    let canzone = SKAction.playSoundFileNamed("SantaEscapeTheme", waitForCompletion: false)
+    var songPlayer: AVAudioPlayer?
+    
+    let jumpSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
+    let fireballSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
     
     //Dichiarare entità qui
     var bounds : [SKSpriteNode] = [SKSpriteNode(imageNamed: "SpringPH"), SKSpriteNode(imageNamed: "SpringPH")]
@@ -59,10 +63,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
     var backgroundGroup = [SKNode]()
     var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
+    //Nodo per SFX
     var soundNode = SKNode()
+    
     //Dichiarare entità animate qui
     var fire : SKSpriteNode!
     var shadow : SKSpriteNode!
+    var fireball : SKSpriteNode!
+    var indicator : SKSpriteNode!
     
     //Variabile per il primo salto
     var firstJump = true
@@ -78,10 +86,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var jumpState: JumpState = .None
     var highest = 0 //Funzione highscore
     var killzoneHeight = -1000 //Altezza killzone
+    var updateTime: Double = 0
+    var fireballTime: Double = 0
     
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
 
+        //Play della canzone
+        let ostPath = Bundle.main.path(forResource: "SantaEscapeTheme.mp3", ofType:nil)!
+        let ostUrl = URL(fileURLWithPath: ostPath)
+        songPlayer = try! AVAudioPlayer(contentsOf: ostUrl)
+        songPlayer?.play()
+        
         camera = cam //Assegnazione telecamera
         
         physicsWorld.contactDelegate = self  //Gestore delle collisioni
@@ -106,8 +122,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         highscoreCreation()
         //Creazione killzone
         killzoneCreation()
-        //play canzone
-        playSound(sound: canzone)
     }
     
     //Chiamata quando tocchi lo schermo
@@ -148,15 +162,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Chiamata prima di ogni frame renderizzato
     override func update(_ currentTime: TimeInterval) {
-//        var updateTime: Double = 0
-//        if updateTime == 0 {
-//                    updateTime = currentTime
-//                }
-//
-//                if currentTime - updateTime > 1 {
-//                    print("wow!")
-//                    updateTime = currentTime
-//                }
+        if updateTime == 0 {
+                    updateTime = currentTime
+                }
+                if currentTime - updateTime > 5 {
+                    //Eseguire al timer
+                    var fbPos = createIndicator()
+                    createFireball(position: fbPos)
+                    updateTime = currentTime
+                }
         //Aggiornamento timer
         timerUpdate(time: currentTime)
         //Aggiornamento highscore
@@ -200,6 +214,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Switch per direzione asse Y (salto)
         switch (jumpState) {
         case .Jump:
+            playSound(sound: jumpSound)
             santa.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 120))
             firstJump = false
             jumpState = .None

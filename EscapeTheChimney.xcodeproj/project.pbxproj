@@ -21,6 +21,7 @@
 		4FAC3FB529487947007F0121 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAC3FB429487947007F0121 /* GameOverScene.swift */; };
 		4FB33C862948E343009986DB /* GameAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB33C852948E343009986DB /* GameAnimations.swift */; };
 		4FB33C882948E939009986DB /* GameSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB33C872948E939009986DB /* GameSounds.swift */; };
+		4FDF24B12949D761001061EA /* jumpSFX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF24B02949D761001061EA /* jumpSFX.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		4FAC3FB429487947007F0121 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		4FB33C852948E343009986DB /* GameAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAnimations.swift; sourceTree = "<group>"; };
 		4FB33C872948E939009986DB /* GameSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSounds.swift; sourceTree = "<group>"; };
+		4FDF24B02949D761001061EA /* jumpSFX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSFX.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				4F411405293E46A100DE8B79 /* LaunchScreen.storyboard */,
 				4F590BA529450652009DC43E /* Minecraft.ttf */,
 				4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */,
+				4FDF24B02949D761001061EA /* jumpSFX.mp3 */,
 			);
 			path = EscapeTheChimney;
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FDF24B12949D761001061EA /* jumpSFX.mp3 in Resources */,
 				4F590BA629450652009DC43E /* Minecraft.ttf in Resources */,
 				4F411402293E46A000DE8B79 /* Main.storyboard in Resources */,
 				4F4113F9293E46A000DE8B79 /* GameScene.sks in Resources */,
