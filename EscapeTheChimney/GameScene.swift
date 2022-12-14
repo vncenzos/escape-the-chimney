@@ -67,6 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var shadow : SKSpriteNode!
     var fireball : SKSpriteNode!
     var indicator : SKSpriteNode!
+    var biscuit : SKSpriteNode!
     
     //Variabile per il primo salto
     var firstJump = true
@@ -80,7 +81,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var movespeed: Int = 3
     var touchLocation: TouchState = .None
     var jumpState: JumpState = .None
-    var highest = 0 //Funzione highscore
+    var score = 0 //Punteggio
+    var biscuitCount = 0 //Conteggio biscotti
+    var highest = 0 //Punto più alto della killzone
     var killzoneHeight = -1000 //Altezza killzone
     var updateTime: Double = 0
     var fireballTime: Double = 0
@@ -113,8 +116,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for _ in 1...10 {
             makeBackground()
         }
-        //Creazione timeLabel
-        timerCreation()
         //Creazione highscoreLabel
         highscoreCreation()
         //Creazione killzone
@@ -130,7 +131,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 touchLocation = .Left
                 if(firstJump){ jumpState = .Jump }
             } else if location.x > 0 {
-                print("Destra - ")
                 touchLocation = .Right
                 if(firstJump){ jumpState = .Jump }
             }
@@ -148,7 +148,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 touchLocation = .Right
                 if(firstJump){ jumpState = .Jump}
             }
-            print(location.x)
         }
     }
     //Chiamata quando finisci di toccare lo schermo
@@ -166,6 +165,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if currentTime - updateTime > 6 {
             //Eseguire al timer
+            createBiscuit()
             createIndicator()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.createFireball()
@@ -173,15 +173,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
                 updateTime = currentTime
         }
-        //Aggiornamento timer
-        timerUpdate(time: currentTime)
         //Aggiornamento highscore
         highscoreUpdate()
         //Aggiornamento killzone
         killzoneUpdate()
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
-        cam.position.y = CGFloat(highest) - 200
+        cam.position.y = CGFloat(killzoneHeight) + 815
         cam.position.x = 0
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
@@ -231,6 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     //Funzione morte di babbo
     func santaDeath() {
+        songPlayer?.stop()
         soundNode.removeAllActions()
         santa.removeFromParent()
         gameOver()
@@ -241,13 +240,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask//Prende contatto di oggetto A e B
         //Contatto tra babbo e fuoco = Morte
         if collision == PhysicsCategory.Player | PhysicsCategory.DeleteBox {
-            print("Contact between santa and fire")
             santaDeath()
         }
         //Contatto tra babbo e piattaforma = Salto
         if collision == PhysicsCategory.Player | PhysicsCategory.Spring {
-            print("Contact between santa and spring")
             jumpState = .Jump
+        }
+        //Contatto tra babbo e piattaforma = Salto
+        if collision == PhysicsCategory.Player | PhysicsCategory.Cookie {
+            biscuitCount+=1
+            contact.bodyB.node?.removeFromParent()
         }
     }
     //Regolatore velocità

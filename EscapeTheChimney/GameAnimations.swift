@@ -23,6 +23,9 @@ extension GameScene{
     var indicatorAtlas: SKTextureAtlas {
        return SKTextureAtlas(named: "indicator")
    }
+    var biscuitAtlas: SKTextureAtlas{
+        return SKTextureAtlas(named: "biscuit")
+    }
     
     //DICHIARAZIONE TEXTURE BASE QUI
      var fireTexture: SKTexture {
@@ -36,6 +39,9 @@ extension GameScene{
     }
     var indicatorTexture: SKTexture {
        return indicatorAtlas.textureNamed("indicator_1")
+    }
+    var biscuitTexture: SKTexture {
+       return biscuitAtlas.textureNamed("biscuit_1")
     }
     
     //DICHIARAZIONE FRAME ANIMAZIONE QUI
@@ -65,6 +71,16 @@ extension GameScene{
            fireballAtlas.textureNamed("fireball_6")
        ]
    }
+    var biscuitTextures: [SKTexture] {
+       return [
+           biscuitAtlas.textureNamed("biscuit_1"),
+           biscuitAtlas.textureNamed("biscuit_2"),
+           biscuitAtlas.textureNamed("biscuit_3"),
+           biscuitAtlas.textureNamed("biscuit_4"),
+           biscuitAtlas.textureNamed("biscuit_5"),
+           biscuitAtlas.textureNamed("biscuit_6")
+       ]
+   }
     //DICHIARAZIONE START ANIMAZIONE
     
     
@@ -79,6 +95,10 @@ extension GameScene{
     func startFireballAnimation() {
         let fireballAnimation = SKAction.animate(with: fireballTextures, timePerFrame: 0.3)
         fireball.run(SKAction.repeat(fireballAnimation, count: 1))
+    }
+    func startBiscuitAnimation() {
+        let biscuitAnimation = SKAction.animate(with: biscuitTextures, timePerFrame: 0.2)
+        biscuit.run(SKAction.repeat(biscuitAnimation, count: 1))
     }
 }
 

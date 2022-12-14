@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F1DC614294A3B5B00EE8009 /* GameOverSong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F1DC613294A3B5B00EE8009 /* GameOverSong.mp3 */; };
 		4F4113F7293E46A000DE8B79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4113F6293E46A000DE8B79 /* AppDelegate.swift */; };
 		4F4113F9293E46A000DE8B79 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4F4113F8293E46A000DE8B79 /* GameScene.sks */; };
 		4F4113FB293E46A000DE8B79 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4F4113FA293E46A000DE8B79 /* Actions.sks */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F1DC613294A3B5B00EE8009 /* GameOverSong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = GameOverSong.mp3; sourceTree = "<group>"; };
 		4F4113F3293E46A000DE8B79 /* EscapeTheChimney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EscapeTheChimney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4113F6293E46A000DE8B79 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F4113F8293E46A000DE8B79 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				4F590BA529450652009DC43E /* Minecraft.ttf */,
 				4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */,
 				4FDF24B02949D761001061EA /* jumpSFX.mp3 */,
+				4F1DC613294A3B5B00EE8009 /* GameOverSong.mp3 */,
 			);
 			path = EscapeTheChimney;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 				4F4113F9293E46A000DE8B79 /* GameScene.sks in Resources */,
 				4F411404293E46A100DE8B79 /* Assets.xcassets in Resources */,
 				4F411407293E46A100DE8B79 /* LaunchScreen.storyboard in Resources */,
+				4F1DC614294A3B5B00EE8009 /* GameOverSong.mp3 in Resources */,
 				4F920EBD2947497A00DEF911 /* SantaEscapeTheme.mp3 in Resources */,
 				4F4113FB293E46A000DE8B79 /* Actions.sks in Resources */,
 			);

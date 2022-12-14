@@ -6,13 +6,22 @@
 //
 
 import SpriteKit
+import AVFoundation
 
 class GameOverScene: SKScene {
     
     let background = SKSpriteNode(imageNamed: "GameOverScreen")
     let gameOver = SKSpriteNode(imageNamed: "GameOver")
+    var songPlayer : AVAudioPlayer?
     
     override func didMove(to view: SKView) {
+        
+        let ostPath = Bundle.main.path(forResource: "GameOverSong.mp3", ofType:nil)!
+        let ostUrl = URL(fileURLWithPath: ostPath)
+        songPlayer = try! AVAudioPlayer(contentsOf: ostUrl)
+        songPlayer?.setVolume(0.1, fadeDuration: 0)
+        songPlayer?.play()
+        
         background.position = CGPoint(x: size.width / 2 , y: size.height / 2)
         addChild(background)
         
