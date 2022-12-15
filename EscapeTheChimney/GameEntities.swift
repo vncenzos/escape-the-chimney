@@ -14,8 +14,9 @@ extension GameScene {
     //Propietà di Babbo Natale
     func makeSanta(){
         
+        var texture = SKTexture(imageNamed: "santa")
         santa.position = CGPoint(x:0, y:-645)
-        santa.physicsBody = SKPhysicsBody(rectangleOf: santa.size)
+        santa.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.9, size: santa.size)
         santa.zPosition = 199
         santa.physicsBody?.isDynamic = true
         santa.physicsBody?.allowsRotation = false
@@ -36,6 +37,14 @@ extension GameScene {
         let platformName = platformNames.randomElement()
         let platformTexture = SKTexture(imageNamed: platformName!)
         let platform = SKSpriteNode(imageNamed: platformName!)
+        platform.physicsBody = SKPhysicsBody(texture: platformTexture, alphaThreshold: 0.9, size: platform.size)
+        platform.position = CGPoint(x: position.x, y: position.y+5)
+        platform.physicsBody?.isDynamic = false
+        platform.physicsBody?.allowsRotation = false
+        platform.physicsBody?.affectedByGravity = false
+        platform.physicsBody?.categoryBitMask = PhysicsCategory.Spring
+        platform.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        platform.physicsBody?.collisionBitMask = PhysicsCategory.Player
         platform.setScale(2)
         platform.zPosition = 150
         let randomX = randomPos.nextInt()
@@ -43,11 +52,11 @@ extension GameScene {
             platform.position = CGPoint(x: randomX , y: Int(santa.position.y+200))
         }
         else{
-            platform.position = CGPoint(x: randomX , y: Int(platformGroup.last!.position.y+200))
+            platform.position = CGPoint(x: randomX , y: Int(platformGroup.last!.position.y+225))
         }
         //print("Platform generated at \(platform.position)") //Test per posizione di generazione piattaforme
         addChild(platform)
-        makeSpring(position: platform.position)
+       // makeSpring(position: platform.position)
         platformGroup.append(platform)
         
     }
@@ -137,10 +146,9 @@ extension GameScene {
     
     func killzoneCreation(){
         
-        shadow = SKSpriteNode(texture: shadowTexture)
         fire = SKSpriteNode(texture: fireTexture)
-        shadow.zPosition = 30
         fire.zPosition = 175
+        fire.yScale = 0.95
         killzone.xScale = 100
         killzone.physicsBody = SKPhysicsBody(rectangleOf: killzone.size)
         killzone.alpha = 0
@@ -150,10 +158,8 @@ extension GameScene {
         killzone.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         addChild(killzone)
         addChild(fire)
-        addChild(shadow)
         
         startFireAnimation()
-        startShadowAnimation()
         
     }
     
@@ -164,17 +170,16 @@ extension GameScene {
             killzoneHeight = kzHeight
         }
         killzone.position = CGPoint(x: 0, y: killzoneHeight)
-        fire.position = CGPoint(x: 0, y: killzoneHeight+170)
-        shadow.position = CGPoint(x:0, y: killzoneHeight+1475)
+        fire.position = CGPoint(x: 0, y: cam.position.y)
         
     }
     
     func makeGround(){
-        
+        var texture = SKTexture(imageNamed: "platform_7")
         ground.position = CGPoint(x: 0, y: santa.position.y-32)
         ground.zPosition = 5
         ground.setScale(2)
-        ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
+        ground.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.9, size: ground.size)
         ground.physicsBody?.isDynamic = false
         ground.physicsBody?.allowsRotation = false
         ground.physicsBody?.affectedByGravity = false
@@ -231,7 +236,7 @@ extension GameScene {
         
         fireball = SKSpriteNode(texture: fireballTexture)
         fireball.zPosition = 15
-        fireball.setScale(0.75)
+        fireball.setScale(1.25)
         fireball.position = CGPoint(x: indicator.position.x, y: killzone.position.y)
         fireball.physicsBody = SKPhysicsBody(circleOfRadius: 5)
         fireball.physicsBody?.affectedByGravity = true

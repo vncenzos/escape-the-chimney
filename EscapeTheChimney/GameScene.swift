@@ -45,20 +45,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Dichiarazione suoni
     let jumpSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
-    let fireballSound = SKAction.playSoundFileNamed("jumpSFX", waitForCompletion: false)
+    let fireballSound = SKAction.playSoundFileNamed("fireballSound", waitForCompletion: false)
+    let crunchSound = SKAction.playSoundFileNamed("crunchSound", waitForCompletion: false)
+    
     
     //Dichiarare entità qui
     var bounds : [SKSpriteNode] = [SKSpriteNode(imageNamed: "SpringPH"), SKSpriteNode(imageNamed: "SpringPH")]
-    var ground = SKSpriteNode(imageNamed: "platform3")
+    var ground = SKSpriteNode(imageNamed: "platform_7")
     var killzone = SKSpriteNode(imageNamed: "SpringPH")
     var timeLabel = SKLabelNode()
     var highscoreLabel = SKLabelNode() //Label dello score salvato
     var scoreLabel = SKLabelNode() //Label dello score corrente
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
-    var platformNames = ["platform1", "platform2", "platform3", "platform4"]
+    var platformNames = ["platform_1","platform_2","platform_3","platform_4","platform_5","platform_6","platform_7"]
     var backgroundGroup = [SKNode]()
-    var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
     
     //Nodo per SFX
     var soundNode = SKNode()
@@ -77,10 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var firstJump = true
     //Distribuzione randomica asse x
     var randomPos = GKRandomDistribution(lowestValue: -260, highestValue: 260)
-    
-    //Distribuzione gaussiana per background
-    var randomBackground = GKGaussianDistribution(randomSource: GKRandomSource(), lowestValue: 0, highestValue: 26)
-    
+    var randomBackground = GKRandomDistribution(lowestValue: 0, highestValue: 6)
     //Dichiarare variabili gameplay qui
     var movespeed: Int = 3
     var touchLocation: TouchState = .None
@@ -100,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let ostPath = Bundle.main.path(forResource: "SantaEscapeTheme.mp3", ofType:nil)!
         let ostUrl = URL(fileURLWithPath: ostPath)
         songPlayer = try! AVAudioPlayer(contentsOf: ostUrl)
-        songPlayer?.setVolume(0.1, fadeDuration: 0)
+        songPlayer?.setVolume(0.15, fadeDuration: 0)
         songPlayer?.play()
         
         camera = cam //Assegnazione telecamera
@@ -257,10 +255,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if collision == PhysicsCategory.Player | PhysicsCategory.Cookie {
             biscuitCount+=1
             contact.bodyB.node?.removeFromParent()
+            playSound(sound: crunchSound)
         }
         if collision == PhysicsCategory.Intangible | PhysicsCategory.Cookie {
             biscuitCount+=1
             contact.bodyB.node?.removeFromParent()
+            playSound(sound: crunchSound)
         }
     }
     //Regolatore velocità

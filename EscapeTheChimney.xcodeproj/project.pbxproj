@@ -24,6 +24,8 @@
 		4FB33C862948E343009986DB /* GameAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB33C852948E343009986DB /* GameAnimations.swift */; };
 		4FB33C882948E939009986DB /* GameSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB33C872948E939009986DB /* GameSounds.swift */; };
 		4FDF24B12949D761001061EA /* jumpSFX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF24B02949D761001061EA /* jumpSFX.mp3 */; };
+		F1A02A28294B353A00FD5F09 /* crunchSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F1A02A27294B353A00FD5F09 /* crunchSound.mp3 */; };
+		F1A02A2A294B372000FD5F09 /* fireballSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F1A02A29294B372000FD5F09 /* fireballSound.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		4FB33C852948E343009986DB /* GameAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAnimations.swift; sourceTree = "<group>"; };
 		4FB33C872948E939009986DB /* GameSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSounds.swift; sourceTree = "<group>"; };
 		4FDF24B02949D761001061EA /* jumpSFX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSFX.mp3; sourceTree = "<group>"; };
+		F1A02A27294B353A00FD5F09 /* crunchSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = crunchSound.mp3; sourceTree = "<group>"; };
+		F1A02A29294B372000FD5F09 /* fireballSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fireballSound.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 				4F920EBC2947497A00DEF911 /* SantaEscapeTheme.mp3 */,
 				4FDF24B02949D761001061EA /* jumpSFX.mp3 */,
 				4F1DC613294A3B5B00EE8009 /* GameOverSong.mp3 */,
+				F1A02A27294B353A00FD5F09 /* crunchSound.mp3 */,
+				F1A02A29294B372000FD5F09 /* fireballSound.mp3 */,
 			);
 			path = EscapeTheChimney;
 			sourceTree = "<group>";
@@ -159,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FDF24B12949D761001061EA /* jumpSFX.mp3 in Resources */,
+				F1A02A2A294B372000FD5F09 /* fireballSound.mp3 in Resources */,
 				4F590BA629450652009DC43E /* Minecraft.ttf in Resources */,
 				4F411402293E46A000DE8B79 /* Main.storyboard in Resources */,
 				4F4113F9293E46A000DE8B79 /* StartScene.sks in Resources */,
@@ -167,6 +174,7 @@
 				4F1DC614294A3B5B00EE8009 /* GameOverSong.mp3 in Resources */,
 				4F920EBD2947497A00DEF911 /* SantaEscapeTheme.mp3 in Resources */,
 				4F4113FB293E46A000DE8B79 /* Actions.sks in Resources */,
+				F1A02A28294B353A00FD5F09 /* crunchSound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +339,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6A727QFG56;
+				DEVELOPMENT_TEAM = Y2CJDZJWLV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EscapeTheChimney/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Santa Escape";
@@ -366,7 +374,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6A727QFG56;
+				DEVELOPMENT_TEAM = Y2CJDZJWLV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EscapeTheChimney/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Santa Escape";
