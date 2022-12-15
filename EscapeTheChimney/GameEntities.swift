@@ -90,30 +90,53 @@ extension GameScene {
         
     }
     
+    
+    func scoreCreation(){
+        
+        scoreLabel.zPosition = 200
+        scoreLabel.fontName = "Minecraft"
+        scoreLabel.setScale(1.25)
+        addChild(scoreLabel)
+        
+    }
     func highscoreCreation(){
         
+        highscore = defaults.integer(forKey: "best")
         highscoreLabel.zPosition = 200
-        highscoreLabel.verticalAlignmentMode = .center
         highscoreLabel.fontName = "Minecraft"
-        highscoreLabel.setScale(2)
+        highscoreLabel.setScale(1.25)
         addChild(highscoreLabel)
         
     }
     
     func highscoreUpdate(){
         
-        let points = Int((Int(santa.position.y)+625)/10)+(biscuitCount*100)
+       /* let points = Int((Int(santa.position.y)+625)/10)+(biscuitCount*100)
         if(points > highest){
             highest = points
             score = points
+            highscore = points
+            defaults.set(highscore, forKey: "best")
+        }*/
+        score = Int((Int(santa.position.y)+625)/10)+(biscuitCount*100)
+        if (score > highscore){
+            highscore = score
+            
+            defaults.set(highscore, forKey: "best")
         }
-        let labelHeight = cam.position.y + 700
-        highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
-        highscoreLabel.text = "Score: "  + String(score)
+        
+        let highscoreLabelHeight = cam.position.y + 700
+        highscoreLabel.position = CGPoint(x: 120, y: highscoreLabelHeight)
+        highscoreLabel.text = "Highscore: "  + String(highscore)
+        
+        let scoreLabelHeight = cam.position.y + 700
+        scoreLabel.position = CGPoint(x: -200, y: scoreLabelHeight)
+        scoreLabel.text = "Score: "  + String(score)
         
     }
     
     func killzoneCreation(){
+        
         shadow = SKSpriteNode(texture: shadowTexture)
         fire = SKSpriteNode(texture: fireTexture)
         shadow.zPosition = 30
@@ -190,6 +213,7 @@ extension GameScene {
     }
     
     func updateBounds(){
+        
         bounds[0].position = CGPoint(x: -300, y: santa.position.y)
         bounds[1].position = CGPoint(x: 300, y: santa.position.y)
         if((santa.physicsBody?.velocity.dy)!>1){
@@ -204,6 +228,7 @@ extension GameScene {
     }
     
     func createFireball(){
+        
         fireball = SKSpriteNode(texture: fireballTexture)
         fireball.zPosition = 15
         fireball.setScale(0.75)
@@ -215,15 +240,17 @@ extension GameScene {
         fireball.physicsBody?.collisionBitMask = PhysicsCategory.None
         fireball.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         addChild(fireball)
-        fireball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 7))
+        fireball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 6.5))
         startFireballAnimation()
         playSound(sound: fireballSound)
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
         self.fireball.removeFromParent()
+            
         }
     }
     
     func createIndicator() {
+        
         indicator = SKSpriteNode(texture: indicatorTexture)
         indicator.position = CGPoint(x: santa.position.x, y: santa.position.y+100)
         indicator.zPosition = 200
@@ -231,20 +258,24 @@ extension GameScene {
         addChild(indicator)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         self.indicator.removeFromParent()
+            
         }
     }
     
     func createBiscuit(){
+        
         biscuit = SKSpriteNode(texture: biscuitTexture)
         biscuit.zPosition = 199
         biscuit.position = CGPoint(x: randomPos.nextInt(), y: Int(santa.position.y)+1500)
-        biscuit.physicsBody = SKPhysicsBody(circleOfRadius: 10)
-        biscuit.physicsBody?.affectedByGravity = true
+        biscuit.physicsBody = SKPhysicsBody(circleOfRadius: 20)
+        biscuit.physicsBody?.affectedByGravity = false
+        biscuit.physicsBody?.velocity = CGVector(dx: 0, dy: -100)
         biscuit.physicsBody?.categoryBitMask = PhysicsCategory.Cookie
         biscuit.physicsBody?.collisionBitMask = PhysicsCategory.None
         biscuit.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         addChild(biscuit)
         startBiscuitAnimation()
+        
     }
 }
 

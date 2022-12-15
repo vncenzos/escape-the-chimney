@@ -52,7 +52,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ground = SKSpriteNode(imageNamed: "platform3")
     var killzone = SKSpriteNode(imageNamed: "SpringPH")
     var timeLabel = SKLabelNode()
-    var highscoreLabel = SKLabelNode()
+    var highscoreLabel = SKLabelNode() //Label dello score salvato
+    var scoreLabel = SKLabelNode() //Label dello score corrente
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
@@ -61,6 +62,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Nodo per SFX
     var soundNode = SKNode()
+    
+    //Comando di salvataggio
+    let defaults = UserDefaults.standard
     
     //Dichiarare entità animate qui
     var fire : SKSpriteNode!
@@ -82,6 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var touchLocation: TouchState = .None
     var jumpState: JumpState = .None
     var score = 0 //Punteggio
+    var highscore = 0 //Punteggio più alto
     var biscuitCount = 0 //Conteggio biscotti
     var highest = 0 //Punto più alto della killzone
     var killzoneHeight = -1000 //Altezza killzone
@@ -116,6 +121,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for _ in 1...10 {
             makeBackground()
         }
+        //Creazione scoreLabel
+        scoreCreation()
         //Creazione highscoreLabel
         highscoreCreation()
         //Creazione killzone
@@ -248,6 +255,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         //Contatto tra babbo e piattaforma = Salto
         if collision == PhysicsCategory.Player | PhysicsCategory.Cookie {
+            biscuitCount+=1
+            contact.bodyB.node?.removeFromParent()
+        }
+        if collision == PhysicsCategory.Intangible | PhysicsCategory.Cookie {
             biscuitCount+=1
             contact.bodyB.node?.removeFromParent()
         }

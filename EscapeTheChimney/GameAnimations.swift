@@ -78,11 +78,15 @@ extension GameScene{
            biscuitAtlas.textureNamed("biscuit_3"),
            biscuitAtlas.textureNamed("biscuit_4"),
            biscuitAtlas.textureNamed("biscuit_5"),
-           biscuitAtlas.textureNamed("biscuit_6")
+           biscuitAtlas.textureNamed("biscuit_6"),
+           biscuitAtlas.textureNamed("biscuit_5"),
+           biscuitAtlas.textureNamed("biscuit_4"),
+           biscuitAtlas.textureNamed("biscuit_3"),
+           biscuitAtlas.textureNamed("biscuit_2"),
        ]
    }
-    //DICHIARAZIONE START ANIMAZIONE
     
+    //DICHIARAZIONE START ANIMAZIONE
     
     func startFireAnimation() {
         let fireAnimation = SKAction.animate(with: fireTextures, timePerFrame: 0.1)
@@ -97,8 +101,9 @@ extension GameScene{
         fireball.run(SKAction.repeat(fireballAnimation, count: 1))
     }
     func startBiscuitAnimation() {
-        let biscuitAnimation = SKAction.animate(with: biscuitTextures, timePerFrame: 0.2)
-        biscuit.run(SKAction.repeat(biscuitAnimation, count: 1))
+        let biscuitAnimation = SKAction.animate(with: biscuitTextures, timePerFrame: 0.1)
+        biscuit.run(SKAction.repeatForever(biscuitAnimation), withKey: "biscuitAnimation")
     }
+    
 }
 
