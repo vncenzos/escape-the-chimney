@@ -89,26 +89,43 @@ extension GameScene {
         addChild(background)
         
     }
+    func scoreCreation(){
+        scoreLabel.zPosition = 200
+        //scoreLabel.position.x = 90
+        scoreLabel.fontName = "Minecraft"
+        scoreLabel.setScale(1.3)
+        addChild(scoreLabel)
+    }
     
     func highscoreCreation(){
         
+        highest = defaults.integer(forKey: "best")
         highscoreLabel.zPosition = 200
-        highscoreLabel.verticalAlignmentMode = .center
+        //highscoreLabel.position.x = 280
         highscoreLabel.fontName = "Minecraft"
-        highscoreLabel.setScale(2)
+        highscoreLabel.setScale(1.3)
         addChild(highscoreLabel)
         
     }
     
+    //Si chiama HighScoreUpdate ma gestisce anche la posizione dello score
     func highscoreUpdate(){
         
-        let score = Int(santa.position.y)+625
+        //let score = Int(santa.position.y)+625
+        score = Int(santa.position.y)+625
         if(score > highest){
             highest = score
+            
+            defaults.set(highest, forKey: "best")
         }
-        let labelHeight = cam.position.y + 700
-        highscoreLabel.position = CGPoint(x: 0, y: labelHeight)
-        highscoreLabel.text = "Score: "  + String(highest)
+        let highscoreLabelHeight = cam.position.y + 600
+        highscoreLabel.position = CGPoint(x: 120, y: highscoreLabelHeight)
+        highscoreLabel.text = "Top Score: "  + String(highest)
+        
+        let scoreLabelHeight = cam.position.y + 600
+        scoreLabel.position = CGPoint(x: -200, y: scoreLabelHeight)
+        scoreLabel.text = "Score: "  + String(score)
+        
         
     }
     
@@ -158,7 +175,8 @@ extension GameScene {
             killzoneHeight = kzHeight
         }
         killzone.position = CGPoint(x: 0, y: killzoneHeight)
-        fire.position = CGPoint(x: 0, y: killzoneHeight+170)
+        //fire.position = CGPoint(x: 0, y: killzoneHeight+170)
+        fire.position = CGPoint (x: 0, y: cam.position.y - 640 )
         shadow.position = CGPoint(x:0, y: killzoneHeight+1475)
         
     }

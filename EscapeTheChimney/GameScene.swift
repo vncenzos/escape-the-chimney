@@ -57,7 +57,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ground = SKSpriteNode(imageNamed: "platform3")
     var killzone = SKSpriteNode(imageNamed: "SpringPH")
     var timeLabel = SKLabelNode()
-    var highscoreLabel = SKLabelNode()
+    var scoreLabel = SKLabelNode() //Label dello score corrente
+    var highscoreLabel = SKLabelNode() //Label dello score che viene salvato
     var santa = SKSpriteNode(imageNamed: "santa")
     var platformGroup = [SKNode]()
     var platformNames = ["platform1", "platform2", "platform3", "platform4"]
@@ -65,6 +66,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var backgroundNames = ["wallUR1", "wallUR2", "wallUR3", "wallVR1", "wallR1" ,"wallR2" ,"wallR3" ,"wallR4" ,"wallR5" ,"wall1C" ,"wall2C" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wallN1" ,"wall5C" ,"wall3C", "wall4C","wallR6" ,"wallR7" ,"wallR8" ,"wallR9" ,"wallR10" , "wallVR2", "wallVR3", "wallUR4", "wallUR5"]
     //Nodo per SFX
     var soundNode = SKNode()
+    
+    //Comando di salvataggio
+    let defaults = UserDefaults.standard
     
     //Dichiarare entità animate qui
     var fire : SKSpriteNode!
@@ -84,7 +88,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var movespeed: Int = 3
     var touchLocation: TouchState = .None
     var jumpState: JumpState = .None
-    var highest = 0 //Funzione highscore
+    var score = 0 //Variabile score
+    var highest = 0 //Variabile highscore
     var killzoneHeight = -1000 //Altezza killzone
     var updateTime: Double = 0
     var fireballTime: Double = 0
@@ -92,6 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Chiamata alla creazione della GameScene
     override func didMove(to view: SKView) {
 
+        
         //Play della canzone
         let ostPath = Bundle.main.path(forResource: "SantaEscapeTheme.mp3", ofType:nil)!
         let ostUrl = URL(fileURLWithPath: ostPath)
@@ -120,6 +126,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerCreation()
         //Creazione highscoreLabel
         highscoreCreation()
+        //Creazione Score
+        scoreCreation()
         //Creazione killzone
         killzoneCreation()
     }
@@ -179,7 +187,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         killzoneUpdate()
         //Aggiornamento telecamera
         cam.setScale(CGFloat(0.95))
-        cam.position.y = CGFloat(highest) - 200
+        cam.position.y = CGFloat(score) - 200
         cam.position.x = 0
         
         //Condizione per far passare babbo attraverso le piattaforme da sotto ma non da sopra
