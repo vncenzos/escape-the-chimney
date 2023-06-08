@@ -10,8 +10,8 @@ import AVFoundation
 
 class StartScene: SKScene {
     
-    let background = SKSpriteNode(imageNamed: "startScreenBKG")
-    let button = SKSpriteNode(imageNamed: "startButton")
+    let background = SKSpriteNode(imageNamed: "StartScreenBKG")
+    let button = SKSpriteNode(imageNamed: "StartButton")
 //    let gameTitle = SKSpriteNode(imageNamed: "gameTitle")
     var songPlayer : AVAudioPlayer?
     // 
